@@ -34,14 +34,15 @@
 ## 安装
 
 ```bash
-# 本地开发（link 到你的源码目录）
-dsh plugin --profile web add link:D:\BaiduSyncdisk\person\dsh-session-export
-
-# 发布后
+# 从 npm 安装（预构建产物，无需任何构建授权）
 dsh plugin --profile web add dsh-session-vault
-```
 
-> 注意：**包名是 `dsh-session-vault`，但源码目录仍叫 `dsh-session-export`**（改名时没动目录，因为这个目录同时是本会话的工作区根目录，中途重命名会让当前会话的 cwd 失效）。`link:` 用的是目录路径，包名来自 `package.json` 的 `name`，两者不一致完全没问题。你想把目录也改掉的话，改完后重新 `add link:<新路径>` 即可。
+# 从 GitHub 安装（纯 JS，无 prepare 脚本，同样无需 allowBuilds 授权）
+dsh plugin --profile web add github:jr-create/dsh-session-vault
+
+# 本地开发（link 到你的源码目录）
+dsh plugin --profile web add link:<你的源码目录>
+```
 
 装完重启 `dsh web`，打开 **设置 → 会话保管库**。
 
