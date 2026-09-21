@@ -1,5 +1,5 @@
 {
-  "name": "dsh-session-vault",
+  "name": "dsh-session-archiver",
   "version": "0.1.0",
   "description": "Browse, export, import and carry DeepSeek Harness (DSH) sessions as portable, version-normalised archives. DSH 会话保管库：浏览、导出、导入与跨机器搬运会话。",
   "type": "module",
