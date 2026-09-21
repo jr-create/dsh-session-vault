@@ -1,0 +1,11 @@
+# Local development links for the DSH core packages this plugin resolves from
+# the harness install closure at runtime. They are junctions created by hand
+# so `node --test` can import the same specifiers the host loader provides.
+node_modules/
+
+# Exported session archives are user data, never repository content.
+*.dshsession
+
+# Scratch output from manual end-to-end runs.
+exports/
+uploads/

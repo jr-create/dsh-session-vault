@@ -1,0 +1,490 @@
+{
+  "session_list": {
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "includeArchived": {
+          "type": "boolean",
+          "description": "Include sessions that are archived. Defaults to true."
+        },
+        "orphansOnly": {
+          "type": "boolean",
+          "description": "Return only orphaned sessions — the deletable ones. Defaults to false."
+        },
+        "emptyOnly": {
+          "type": "boolean",
+          "description": "Return only never-used sessions: mounted, but with no conversation in the log. These are the \"shell\" sessions that clutter a sidebar. Defaults to false."
+        },
+        "unmountedOnly": {
+          "type": "boolean",
+          "description": "Return only the sessions no workspace accounts for, archived ones included. Defaults to false."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Return at most this many sessions. Omit for all of them."
+        }
+      }
+    },
+    "outputSchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "count": {
+          "type": "integer",
+          "description": "Number of sessions returned."
+        },
+        "unmountedCount": {
+          "type": "integer",
+          "description": "Number of the returned sessions that no workspace accounts for."
+        },
+        "reclaimableBytes": {
+          "type": "integer",
+          "description": "Total size of the returned sessions that no workspace accounts for; the archived part of it needs an explicit opt-in to delete."
+        },
+        "sessions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "cwd": {
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "number",
+                "description": "Unix epoch milliseconds."
+              },
+              "eventCount": {
+                "type": "number"
+              },
+              "sizeBytes": {
+                "type": "number"
+              },
+              "conversation": {
+                "type": "boolean",
+                "description": "False when the log holds no conversation at all — only the events that creating a session writes — so no title can be derived from it. Absent means this was not established, not that the session has content."
+              },
+              "archived": {
+                "type": "boolean"
+              },
+              "mounted": {
+                "type": "boolean",
+                "description": "Some workspace accounts for this session."
+              },
+              "orphaned": {
+                "type": "boolean",
+                "description": "No workspace accounts for this session and it is not archived — the only kind session_delete accepts."
+              },
+              "isSeeded": {
+                "type": "boolean"
+              },
+              "workspaceTitle": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "createdAt",
+              "archived",
+              "mounted",
+              "orphaned",
+              "isSeeded"
+            ]
+          }
+        }
+      },
+      "required": [
+        "count",
+        "unmountedCount",
+        "reclaimableBytes",
+        "sessions"
+      ]
+    }
+  },
+  "session_export": {
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "description": "Session ids to export. Omit or pass an empty array to export every stored session.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "outputPath": {
+          "type": "string",
+          "description": "Archive file to create. Defaults to an auto-named file in <DSH_HOME>/dsh-session-vault/exports. Must end in .dshsession."
+        }
+      }
+    },
+    "outputSchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Absolute path of the written archive."
+        },
+        "sessionCount": {
+          "type": "integer"
+        },
+        "eventCount": {
+          "type": "integer"
+        },
+        "bytes": {
+          "type": "integer"
+        },
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "failed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "reason"
+            ]
+          }
+        }
+      },
+      "required": [
+        "path",
+        "sessionCount",
+        "eventCount",
+        "bytes",
+        "ids",
+        "failed"
+      ]
+    }
+  },
+  "session_archive_inspect": {
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "archivePath": {
+          "type": "string",
+          "description": "Absolute path of the .dshsession archive to inspect."
+        }
+      },
+      "required": [
+        "archivePath"
+      ]
+    },
+    "outputSchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sessionCount": {
+          "type": "integer"
+        },
+        "eventCount": {
+          "type": "integer"
+        },
+        "exportedAt": {
+          "type": "string"
+        },
+        "generatorVersion": {
+          "type": "string"
+        },
+        "sessions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "cwd": {
+                "type": "string"
+              },
+              "eventCount": {
+                "type": "number"
+              },
+              "isSeeded": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "isSeeded"
+            ]
+          }
+        }
+      },
+      "required": [
+        "sessionCount",
+        "eventCount",
+        "sessions"
+      ]
+    }
+  },
+  "session_import": {
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "archivePath": {
+          "type": "string",
+          "description": "Absolute path of the .dshsession archive to import."
+        },
+        "workspacePath": {
+          "type": "string",
+          "description": "Workspace directory to import into. Defaults to each session's recorded working directory. Set this to relocate sessions to a different path, for example after moving to another machine."
+        },
+        "mode": {
+          "type": "string",
+          "description": "What to do when a session id already exists. Defaults to \"skip\".",
+          "enum": [
+            "skip",
+            "rename"
+          ]
+        },
+        "createMissingDirectory": {
+          "type": "boolean",
+          "description": "Create a missing workspace directory. Defaults to true."
+        },
+        "dryRun": {
+          "type": "boolean",
+          "description": "Plan the import and report what would happen, without writing anything."
+        }
+      },
+      "required": [
+        "archivePath"
+      ]
+    },
+    "outputSchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dryRun": {
+          "type": "boolean"
+        },
+        "imported": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "sourceId": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "cwd": {
+                "type": "string"
+              },
+              "eventCount": {
+                "type": "integer"
+              },
+              "title": {
+                "type": "string"
+              },
+              "renamed": {
+                "type": "boolean"
+              },
+              "workspaceAttached": {
+                "type": "boolean"
+              },
+              "workspaceError": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "sourceId",
+              "id",
+              "eventCount",
+              "workspaceAttached"
+            ]
+          }
+        },
+        "skipped": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "reason"
+            ]
+          }
+        },
+        "failed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "reason"
+            ]
+          }
+        }
+      },
+      "required": [
+        "dryRun",
+        "imported",
+        "skipped",
+        "failed"
+      ]
+    }
+  },
+  "session_delete": {
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "description": "Ids of the orphaned sessions to delete.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dryRun": {
+          "type": "boolean",
+          "description": "Report what would be deleted without removing anything. Do this first."
+        },
+        "confirm": {
+          "type": "boolean",
+          "description": "Must be true to delete. Ignored when dryRun is true."
+        },
+        "includeArchived": {
+          "type": "boolean",
+          "description": "Also delete archived sessions that no workspace accounts for. Defaults to false, because an archive may be the only copy left."
+        },
+        "includeEmpty": {
+          "type": "boolean",
+          "description": "Also delete never-used sessions: mounted sessions whose log holds no conversation at all, only the events that creating a session writes. Defaults to false. This is the only way a session attached to a workspace can be deleted, and it applies only to sessions the host established as conversation-free — never to one whose contents it could not read."
+        }
+      },
+      "required": [
+        "ids"
+      ]
+    },
+    "outputSchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dryRun": {
+          "type": "boolean"
+        },
+        "reclaimedBytes": {
+          "type": "integer"
+        },
+        "deleted": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "bytes": {
+                "type": "integer"
+              },
+              "spillRemoved": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "refused": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "reason"
+            ]
+          }
+        },
+        "failed": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "reason"
+            ]
+          }
+        },
+        "survivors": {
+          "type": "array",
+          "description": "Ids still listed after their files were removed, meaning a running process is serving them from an in-memory index; restarting dsh is what clears them.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "dryRun",
+        "reclaimedBytes",
+        "deleted",
+        "refused",
+        "failed",
+        "survivors"
+      ]
+    }
+  }
+}

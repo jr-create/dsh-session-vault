@@ -1,0 +1,62 @@
+{
+  "name": "dsh-session-vault",
+  "version": "0.1.0",
+  "description": "Browse, export, import and carry DeepSeek Harness (DSH) sessions as portable, version-normalised archives. DSH 会话保管库：浏览、导出、导入与跨机器搬运会话。",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "main": "lib/index.js",
+  "homepage": "https://github.com/jr-create/dsh-session-vault#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/jr-create/dsh-session-vault.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jr-create/dsh-session-vault/issues"
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./archive": "./lib/archive.js",
+    "./engine": "./lib/engine.js",
+    "./http": "./lib/http.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-ui-settings"
+      ],
+      "platform": "web"
+    }
+  },
+  "keywords": [
+    "deepseek",
+    "dsh",
+    "dsh-plugin",
+    "session",
+    "session-management",
+    "export",
+    "import",
+    "backup",
+    "migration",
+    "portable",
+    "cordis"
+  ]
+}

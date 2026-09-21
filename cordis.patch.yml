@@ -1,0 +1,21 @@
+# dsh-session-vault bundle patch.
+#
+# Inserts the plugin row into the web profile roster. `dsh.bundle.patch` in
+# package.json points here, which is what makes the package a real DSH bundle
+# rather than a plain dependency.
+#
+#   dsh plugin --profile web add link:<abs-path>   # local development
+#   dsh plugin --profile web add dsh-session-vault  # published
+#
+# The row id must match the Host plugin's `export const name` in lib/index.js.
+#
+# The host half registers:
+#   - /api/dsh-session-vault/*   HTTP routes used by the browser half
+#   - session_list / session_export / session_archive_inspect / session_import
+#     model tools
+#
+# The browser half is declared by the `dsh.client` block in package.json and
+# is served from the "./client" export.
+- insert:
+    - id: session-vault
+      name: 'dsh-session-vault'
