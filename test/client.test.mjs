@@ -22,7 +22,7 @@ import { describe, it } from 'node:test';
 import { createRoutes, ROUTE_PREFIX } from '../lib/http.js';
 
 /** The package name; the bundle id must equal it. */
-const PACKAGE_NAME = 'dsh-session-archiver';
+const PACKAGE_NAME = 'dsh-session-vault';
 
 const PACKAGE_ROOT = new URL('../', import.meta.url);
 

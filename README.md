@@ -1,4 +1,4 @@
-# dsh-session-archiver · DSH 会话保管库
+# dsh-session-vault · DSH 会话保管库
 
 **浏览、导出、导入，以及跨机器搬运** DeepSeek Harness（DSH）的会话。
 
@@ -11,7 +11,7 @@
 >
 > 曾用名 `dsh-session-export`——那个名字只说了三分之一的能力，所以改了。归档文件里的格式标记是 `dsh-session-archive`（**不是**插件名），旧的 `dsh-session-export` 标记仍可读取，你已有的归档不会失效。
 >
-> npm 上叫 **`dsh-session-archiver`**（`dsh-session-vault` 已被一个无关插件占用）；GitHub 仓库与内部路由/数据目录仍用 vault 命名，二者互不影响。
+> npm 上不叫 `dsh-session-vault`（已被一个无关插件占用），因此**通过 GitHub 直接分发**。仓库名与内部路由/数据目录仍用 vault 命名，二者互不影响。
 
 ---
 
@@ -36,11 +36,11 @@
 ## 安装
 
 ```bash
-# 从 npm 安装（预构建产物，无需任何构建授权）
-dsh plugin --profile web add dsh-session-archiver
-
-# 从 GitHub 安装（纯 JS，无 prepare 脚本，同样无需 allowBuilds 授权）
+# 从 GitHub 安装（纯 JS，无构建步骤，因此不需要 prepare 脚本 / allowBuilds 授权）
 dsh plugin --profile web add github:jr-create/dsh-session-vault
+
+# 锁定到某个 commit（推荐：后续推送无法悄悄改变实际运行的内容）
+dsh plugin --profile web add github:jr-create/dsh-session-vault#<sha>
 
 # 本地开发（link 到你的源码目录）
 dsh plugin --profile web add link:<你的源码目录>
@@ -51,7 +51,7 @@ dsh plugin --profile web add link:<你的源码目录>
 卸载：
 
 ```bash
-dsh plugin --profile web remove dsh-session-archiver
+dsh plugin --profile web remove dsh-session-vault
 ```
 
 ### ⚠️ 这个插件没有任何依赖，请保持这样
@@ -279,9 +279,9 @@ dsh --profile web --dump-config | Select-String -Pattern "session-vault" -Contex
 `--dump-config` 只组合 profile 树然后退出，不启动服务：
 
 ```yaml
-# == dsh-session-archiver
+# == dsh-session-vault
 - id: session-vault
-  name: dsh-session-archiver
+  name: dsh-session-vault
 ```
 
 但**组合成功 ≠ 加载成功**。要确认宿主端真的挂上，起一个临时实例再打它的接口：

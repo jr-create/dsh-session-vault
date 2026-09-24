@@ -1,11 +1,11 @@
-# dsh-session-archiver bundle patch.
+# dsh-session-vault bundle patch.
 #
 # Inserts the plugin row into the web profile roster. `dsh.bundle.patch` in
 # package.json points here, which is what makes the package a real DSH bundle
 # rather than a plain dependency.
 #
-#   dsh plugin --profile web add link:<abs-path>      # local development
-#   dsh plugin --profile web add dsh-session-archiver # published
+#   dsh plugin --profile web add link:<abs-path>          # local development
+#   dsh plugin --profile web add github:jr-create/dsh-session-vault  # published
 #
 # The row id must match the Host plugin's `export const name` in lib/index.js.
 #
@@ -18,4 +18,4 @@
 # is served from the "./client" export.
 - insert:
     - id: session-vault
-      name: 'dsh-session-archiver'
+      name: 'dsh-session-vault'
