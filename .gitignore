@@ -9,3 +9,7 @@ node_modules/
 # Scratch output from manual end-to-end runs.
 exports/
 uploads/
+
+# Release tarballs are build output: they are attached to the GitHub Release,
+# never committed to the tree.
+*.tgz

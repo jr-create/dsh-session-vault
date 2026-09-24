@@ -42,6 +42,9 @@ dsh plugin --profile web add github:jr-create/dsh-session-vault
 # 锁定到某个 commit（推荐：后续推送无法悄悄改变实际运行的内容）
 dsh plugin --profile web add github:jr-create/dsh-session-vault#<sha>
 
+# 或装 Release 里的预打包 tarball（同样无需构建）
+dsh plugin --profile web add ./dsh-session-vault-0.1.0.tgz
+
 # 本地开发（link 到你的源码目录）
 dsh plugin --profile web add link:<你的源码目录>
 ```
