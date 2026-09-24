@@ -1,5 +1,7 @@
 # dsh-session-vault · DSH 会话保管库
 
+[![Listed on dsh-plugin.org](https://dsh-plugin.org/badges/listed.svg)](https://dsh-plugin.org/plugins/jr-create/dsh-session-vault)
+
 **浏览、导出、导入，以及跨机器搬运** DeepSeek Harness（DSH）的会话。
 
 一个 DSH 插件包：宿主端（Node）+ 浏览器端（设置页 UI）双面，外加 4 个模型工具，让 Agent 也能自己搬会话。
@@ -30,6 +32,30 @@
 | **模型工具** | `session_list` / `session_export` / `session_archive_inspect` / `session_import` / `session_delete` |
 
 归档格式是 **gzip 压缩的 JSONL**，并且是**归一化**的：导出的是持久化服务返回的事件，而不是磁盘上的原始字节。因此归档能跨越 DSH 的会话格式代际，被更新版本的 DSH 导入。磁盘目录的逐字节备份是另一件事。
+
+## 真实输出
+
+`GET /api/dsh-session-vault/sessions`（回环 + 同源围栏内）返回的会话清单，节选自真实运行实例：
+
+```json
+{
+  "ok": true,
+  "sessions": [
+    {
+      "id": "session-362579c9-a7b3-4b2c-b2d7-d12934cc7192",
+      "title": "创建DSH会话导入导出插件",
+      "titleSource": "cache",
+      "sizeBytes": 2305196,
+      "archived": false,
+      "mounted": true,
+      "orphaned": false,
+      "workspace": { "path": "D:\\BaiduSyncdisk\\person\\dsh-session-vault", "title": "dsh-session-vault" }
+    }
+  ]
+}
+```
+
+模型工具的真实往返（导出 → 检查 → 导入 dry-run）在 `test/engine.test.mjs` 与 `test/plugin.test.mjs` 中逐条覆盖，`node --test` 共 **201 项测试，全部离线通过**。
 
 ---
 
@@ -319,6 +345,23 @@ lib/client.js       浏览器端：window.__ModuleLoader__ 工厂 + 设置页 UI
 ```bash
 dsh web
 ```
+
+## 兼容性与权限
+
+| 项 | 值 |
+| --- | --- |
+| 安装命令 | `dsh plugin --profile web add github:jr-create/dsh-session-vault` |
+| 目标 profile | `web`（宿主端服务任意 profile 可用；设置页 UI 挂在 web 界面） |
+| Node 版本 | `^22.19.0 \|\| >=24.0.0` |
+| 许可证 | MIT |
+| 运行时依赖 | **无**（零依赖，无 `node_modules`，安装无需构建/授权步骤） |
+
+**权限与外部服务声明**：本插件**不访问任何外部服务，不发起任何出站网络请求**；所有数据只读写本机 `<DSH_HOME>`。涉及的能力：
+
+- 读写 `<DSH_HOME>/sessions`（列表/导出/导入/删除，删除仅限「安全边界」一节列明的围栏内场景，且需 `confirm: true`）
+- 读写插件自己的数据目录 `<DSH_HOME>/dsh-session-vault/`（归档暂存、上传暂存）
+- 注册 4 个模型工具（`session_list` / `session_export` / `session_archive_inspect` / `session_import`），遵守会话自身的审批策略
+- HTTP 路由仅服务回环请求并校验同源；对局域网暴露的部署不会开放这些端点
 
 ---
 
