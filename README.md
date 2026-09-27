@@ -352,6 +352,7 @@ dsh web
 | --- | --- |
 | 安装命令 | `dsh plugin --profile web add github:jr-create/dsh-session-vault` |
 | 目标 profile | `web`（宿主端服务任意 profile 可用；设置页 UI 挂在 web 界面） |
+| DSH 版本 | **实测于 `0.1.5-rc.2`**（开发与全部 201 项测试所运行的宿主版本；安装前建议 `dsh --version` 自查） |
 | Node 版本 | `^22.19.0 \|\| >=24.0.0` |
 | 许可证 | MIT |
 | 运行时依赖 | **无**（零依赖，无 `node_modules`，安装无需构建/授权步骤） |
@@ -374,6 +375,9 @@ model-facing tools, and a loopback-fenced HTTP route family. Archives are
 normalised to the current session format, so they import into a newer DSH than
 wrote them. Existing sessions are never overwritten: a colliding id is skipped
 or imported under a fresh one.
+
+Tested against DeepSeek Harness **`0.1.5-rc.2`** — the host version this plugin
+was developed on and the one all 201 offline tests ran under.
 
 It also reclaims disk from two kinds of junk — **unmounted** sessions (no
 workspace accounts for them, in either the registry's validated view or the
