@@ -8,10 +8,10 @@
     "node": "^22.19.0 || >=24.0.0"
   },
   "main": "lib/index.js",
-  "homepage": "https://github.com/jr-create/dsh-session-vault#readme",
+  "homepage": "https://dsh-plugin.org/plugins/jr-create/dsh-session-vault",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/jr-create/dsh-session-vault.git"
+    "url": "git+https://github.com/jr-create/dsh-session-vault.git"
   },
   "bugs": {
     "url": "https://github.com/jr-create/dsh-session-vault/issues"
@@ -29,6 +29,17 @@
     "cordis.patch.yml",
     "README.md",
     "LICENSE"
+  ],
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "dsh",
+    "session",
+    "archive",
+    "export",
+    "import",
+    "backup",
+    "migration"
   ],
   "scripts": {
     "test": "node --test"
