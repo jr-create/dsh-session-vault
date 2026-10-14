@@ -1,7 +1,7 @@
 # dsh-session-vault · DSH 会话保管库
 
 [![Listed on dsh-plugin.org](https://dsh-plugin.org/badges/listed.svg)](https://dsh-plugin.org/plugins/jr-create/dsh-session-vault)
-
+配合dsh-config-manager可实现完整dsh配置+会话换机移植。
 **浏览、导出、导入，以及跨机器搬运** DeepSeek Harness（DSH）的会话。
 
 一个 DSH 插件包：宿主端（Node）+ 浏览器端（设置页 UI）双面，外加 4 个模型工具，让 Agent 也能自己搬会话。
